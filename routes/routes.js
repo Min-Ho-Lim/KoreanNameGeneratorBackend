@@ -7,5 +7,6 @@ const {
 
 router.get("/getRandomFirstName", getRandomFirstName);
 router.get("/getRandomLastName", getRandomLastName);
+router.get("/getRandomFullName");
 
 module.exports = router;
