@@ -20,6 +20,17 @@ database.once("connected", () => {
 const app = express();
 app.use(cors());
 app.use(express.json({ extended: false }));
+app.get("/", async (req, res) => {
+  try {
+    res.json({
+      status: 200,
+      message: "You are seeing Korean Name Generator API Backend",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Server Error");
+  }
+});
 
 const routes = require("./routes/routes");
 
