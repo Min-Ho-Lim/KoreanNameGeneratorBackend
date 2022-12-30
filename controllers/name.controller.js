@@ -1,7 +1,15 @@
 const nameObject = require("../middlewares/storeNames.middleware");
 
 const getDefaultPage = async (req, res) => {
-  res.sendFile("index.html", { root: path.join(__dirname, "public") });
+  try {
+    res.json({
+      status: 200,
+      message: "You are seeing Korean Name Generator API Backend",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Server Error");
+  }
 };
 
 const getRandomFirstName = async (req, res) => {
