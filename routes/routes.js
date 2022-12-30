@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {
+  getDefaultPage,
   getRandomFirstName,
   getRandomLastName,
   getRandomFullName,
 } = require("../controllers/name.controller");
 
-router.get("/", "Nothing");
+router.get("/", getDefaultPage);
 router.get("/getRandomFirstName", getRandomFirstName);
 router.get("/getRandomLastName", getRandomLastName);
 router.get("/getRandomFullName", getRandomFullName);

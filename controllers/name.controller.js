@@ -1,5 +1,9 @@
 const nameObject = require("../middlewares/storeNames.middleware");
 
+const getDefaultPage = async (req, res) => {
+  res.sendFile("index.html", { root: path.join(__dirname, "public") });
+};
+
 const getRandomFirstName = async (req, res) => {
   if (!nameObject.firstName) {
     res.status(400).json({
@@ -91,4 +95,9 @@ const getRandomFullName = async (req, res) => {
   res.json({ firstName, lastName });
 };
 
-module.exports = { getRandomFirstName, getRandomLastName, getRandomFullName };
+module.exports = {
+  getDefaultPage,
+  getRandomFirstName,
+  getRandomLastName,
+  getRandomFullName,
+};
