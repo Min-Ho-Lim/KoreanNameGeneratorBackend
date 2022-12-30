@@ -6,6 +6,7 @@ const {
   getRandomFullName,
 } = require("../controllers/name.controller");
 
+router.get("/", "Nothing");
 router.get("/getRandomFirstName", getRandomFirstName);
 router.get("/getRandomLastName", getRandomLastName);
 router.get("/getRandomFullName", getRandomFullName);
