@@ -1,5 +1,8 @@
 const nameObject = require("../middlewares/storeNames.middleware");
 
+const firstNameModel = require("../models/firstname.model");
+const lastNameModel = require("../models/lastname.model");
+
 const getDefaultPage = async (req, res) => {
   try {
     res.json({
@@ -13,13 +16,6 @@ const getDefaultPage = async (req, res) => {
 };
 
 const getRandomFirstName = async (req, res) => {
-  if (!nameObject.firstName) {
-    res.status(400).json({
-      message: "nameObject.firstName is not set",
-    });
-    return;
-  }
-
   // if req.body.popularity is set
   const popularity = req.body.popularity || 100;
 
@@ -31,21 +27,19 @@ const getRandomFirstName = async (req, res) => {
     return;
   }
 
-  // return random first name from nameObject.firstName array
-  const firstName =
-    nameObject.firstName[Math.floor(Math.random() * popularity)];
+  // return random first name from firstname model
+  // limit will limit the number of documents to be returned
+  // sample will return a random document among the limit
+  const firstName = await firstNameModel.aggregate([
+    { $limit: popularity },
+    { $sample: { size: 1 } },
+  ]);
+
   res.json(firstName);
 };
 
 // get random last name
 const getRandomLastName = async (req, res) => {
-  if (!nameObject.lastName) {
-    res.status(400).json({
-      message: "nameObject.lastName is not set",
-    });
-    return;
-  }
-  // if req.body.popularity is set
   const popularity = req.body.popularity || 30;
 
   if (popularity > nameObject.lastName?.length) {
@@ -55,8 +49,14 @@ const getRandomLastName = async (req, res) => {
     return;
   }
 
-  // return random first name from nameObject.firstName array
-  const lastName = nameObject.lastName[Math.floor(Math.random() * popularity)];
+  // return random last name from lastName model
+  // limit will limit the number of documents to be returned
+  // sample will return a random document among the limit
+  const lastName = await lastNameModel.aggregate([
+    { $limit: popularity },
+    { $sample: { size: 1 } },
+  ]);
+
   res.json(lastName);
 };
 
