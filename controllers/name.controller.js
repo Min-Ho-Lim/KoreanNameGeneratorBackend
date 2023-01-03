@@ -1,5 +1,3 @@
-const nameObject = require("../middlewares/storeNames.middleware");
-
 const firstNameModel = require("../models/firstname.model");
 const lastNameModel = require("../models/lastname.model");
 
@@ -19,10 +17,9 @@ const getRandomFirstName = async (req, res) => {
   // if req.body.popularity is set
   const popularity = req.body.popularity || 100;
 
-  if (popularity > nameObject.firstName?.length) {
+  if (popularity > 10000) {
     res.status(400).json({
-      message:
-        "popularity is too high. Limit is " + nameObject.firstName.length,
+      message: "popularity is too high. Limit is " + 10000,
     });
     return;
   }
@@ -42,9 +39,9 @@ const getRandomFirstName = async (req, res) => {
 const getRandomLastName = async (req, res) => {
   const popularity = req.body.popularity || 30;
 
-  if (popularity > nameObject.lastName?.length) {
+  if (popularity > 288) {
     res.status(400).json({
-      message: "popularity is too high. Limit is " + nameObject.lastName.length,
+      message: "popularity is too high. Limit is " + 288,
     });
     return;
   }
@@ -63,13 +60,6 @@ const getRandomLastName = async (req, res) => {
 // get random full name
 // TODO: Make them reusable
 const getRandomFullName = async (req, res) => {
-  if (!nameObject.firstName || !nameObject.lastName) {
-    res.status(400).json({
-      message: "nameObject.firstName or nameObject.lastName is not set",
-    });
-    return;
-  }
-
   const popularityLastName = req.body.popularityLastName || 30;
 
   if (popularityLastName > nameObject.lastName?.length) {
@@ -92,13 +82,15 @@ const getRandomFullName = async (req, res) => {
     return;
   }
 
-  // return random first name from nameObject.firstName array
-  const firstName =
-    nameObject.firstName[Math.floor(Math.random() * popularityFirstName)];
+  const firstName = await firstNameModel.aggregate([
+    { $limit: popularity },
+    { $sample: { size: 1 } },
+  ]);
 
-  // return random first name from nameObject.firstName array
-  const lastName =
-    nameObject.lastName[Math.floor(Math.random() * popularityLastName)];
+  const lastName = await lastNameModel.aggregate([
+    { $limit: popularity },
+    { $sample: { size: 1 } },
+  ]);
 
   res.json({ firstName, lastName });
 };
