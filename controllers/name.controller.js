@@ -1,6 +1,11 @@
 const firstNameModel = require("../models/firstname.model");
 const lastNameModel = require("../models/lastname.model");
 
+const {
+  fisrtNameConstant,
+  lastNameConstant,
+} = require("../constants/name.constant");
+
 const getDefaultPage = async (req, res) => {
   try {
     res.json({
@@ -15,11 +20,12 @@ const getDefaultPage = async (req, res) => {
 
 const getRandomFirstName = async (req, res) => {
   // if req.body.popularity is set
-  const popularity = req.body.popularity || 100;
+  const popularity = req.body.popularity || fisrtNameConstant.defaultPopularity;
 
-  if (popularity > 10000) {
+  if (popularity > fisrtNameConstant.maxPopularity) {
     res.status(400).json({
-      message: "popularity is too high. Limit is " + 10000,
+      message:
+        "popularity is too high. Limit is " + fisrtNameConstant.maxPopularity,
     });
     return;
   }
@@ -37,11 +43,12 @@ const getRandomFirstName = async (req, res) => {
 
 // get random last name
 const getRandomLastName = async (req, res) => {
-  const popularity = req.body.popularity || 30;
+  const popularity = req.body.popularity || lastNameConstant.defaultPopularity;
 
-  if (popularity > 288) {
+  if (popularity > lastNameConstant.maxPopularity) {
     res.status(400).json({
-      message: "popularity is too high. Limit is " + 288,
+      message:
+        "popularity is too high. Limit is " + lastNameConstant.maxPopularity,
     });
     return;
   }
@@ -60,24 +67,26 @@ const getRandomLastName = async (req, res) => {
 // get random full name
 // TODO: Make them reusable
 const getRandomFullName = async (req, res) => {
-  const popularityLastName = req.body.popularityLastName || 30;
+  const popularityLastName =
+    req.body.popularityLastName || lastNameConstant.defaultPopularity;
 
-  if (popularityLastName > nameObject.lastName?.length) {
+  if (popularityLastName > lastNameConstant.maxPopularity) {
     res.status(400).json({
       message:
         "popularityLastName is too high. Limit is " +
-        nameObject.lastName.length,
+        lastNameConstant.maxPopularity,
     });
     return;
   }
 
-  const popularityFirstName = req.body.popularityFirstName || 100;
+  const popularityFirstName =
+    req.body.popularityFirstName || fisrtNameConstant.defaultPopularity;
 
-  if (popularityFirstName > nameObject.firstName?.length) {
+  if (popularityFirstName > fisrtNameConstant.maxPopularity) {
     res.status(400).json({
       message:
         "popularityFirstName is too high. Limit is " +
-        nameObject.firstName.length,
+        fisrtNameConstant.maxPopularity,
     });
     return;
   }
