@@ -92,12 +92,12 @@ const getRandomFullName = async (req, res) => {
   }
 
   const firstName = await firstNameModel.aggregate([
-    { $limit: popularity },
+    { $limit: popularityFirstName },
     { $sample: { size: 1 } },
   ]);
 
   const lastName = await lastNameModel.aggregate([
-    { $limit: popularity },
+    { $limit: popularityLastName },
     { $sample: { size: 1 } },
   ]);
 
